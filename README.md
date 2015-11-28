@@ -5,6 +5,7 @@ Easy REST JSON client library dedicated for API queries for Python 2.x
 
 Provides high level function to get data from REST API servers (JSON).
 
+* POST or GET
 * Quickly and easily extracts variable from JSON API HTTP server
 * Automatically deals with encodings and server communication
 * No dependency except python built-in
@@ -40,14 +41,22 @@ In case URL was not given during initialisation, URL can be provided this way.
 #### Add Params
 In case the server needs any parameter ( ...?a=1234&b=5678 ), add_param adds a parameter to the query object.
 
-Parameter shall be a single entry dictionnary. Several parameters can be given , with a dictionnary, at the initialisation level.
+Parameter shall be a single entry dictionary. Several parameters can be given , with a dictionary, at the initialisation level.
 
 The encoding is directly performs by the library. 
 
     MyQueryClient.add_param(param_as_a_key_dict)
 
+	
+#### POST Data
+In case the API is POST. You can add data like you add parameters for GET.
+
+    MyQueryClient.add_data(data_to_post)
+
+Then when you get data, the library will automatically post you data as a query.
+
 #### Get Data
-The central function of the library: sends actually the query to the server, gets the data, decode the JSON and automatically saves it internally, for futur use as "getkey". Returns nothing. 
+The central function of the library: sends actually the query to the server, gets or posts the data, decode the JSON and automatically saves it internally, for futur use as "getkey". Returns nothing. 
 
     MyQueryClient.get_data()
 
@@ -63,7 +72,7 @@ Can be used with int() of float() to convert data to number.
     usd_rate = float(MyClient.getkey("rate/currency/USD"))
 
 
-**Form more details: see code in examples directory**
+**Form more details: see code in examples directory or below**
 
 
 ## Example :
@@ -78,7 +87,17 @@ The following example prints the present temperature in Paris France, in celsius
     pres_temp = queryweather.getkey("main/temp")
     print pres_temp
 
+	
+To post data (fictve) :
 
+    import easy_rest_json
+    postapi = easy_rest_json.rest_json()
+    postapi.set_url('https://api.apijen.com/OpenApi/json/GetDATA')
+    postapi.add_data("""{"ApiKey": "0f13285e","Associated": false,"Images": false,"ERT": false}}}""" )
+    postapi.get_data()
+    pres_temp = postapi.getkey("Prod/img")
+	
+	
 Licence :
 ----------
 This program is free software: you can redistribute it and/or modify

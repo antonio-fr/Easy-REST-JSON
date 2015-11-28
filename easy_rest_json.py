@@ -23,6 +23,7 @@ class rest_json:
 		self.url=url
 		self.params=dict(params)
 		self.jsres=[]
+		self.post=False
 	
 	def set_url(self,url):
 		self.url=url
@@ -30,13 +31,20 @@ class rest_json:
 	def add_param(self,param):
 		self.params.update(param)
 	
+	def add_data(self,data):
+		self.data=data
+		self.post=True
+	
 	def get_data(self):
 		params_enc = urllib.urlencode( self.params )
 		try:
-			self.webrsc = urllib2.urlopen(self.url+"?"+params_enc)
+			if self.post:
+				self.webrsc = urllib2.urlopen(self.url,self.data)
+			else:
+				self.webrsc = urllib2.urlopen(self.url+"?"+params_enc)
 			self.jsres=json.load(self.webrsc)
 		except:
-			raise IOError("Error while processing request:\n%s"%(self.url+"?"+params_enc))
+			raise IOError("Error while processing request:\n%s"%(self.url))
 	
 	def getkey(self,keychar):
 		out=self.jsres
