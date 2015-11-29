@@ -44,7 +44,11 @@ class rest_json:
 				self.webrsc = urllib2.urlopen(self.url+"?"+params_enc)
 			self.jsres=json.load(self.webrsc)
 		except:
-			raise IOError("Error while processing request:\n%s"%(self.url))
+			if self.post:
+				debug_data = "|POST:"+self.data
+			else:
+				debug_data = "?"+params_enc
+			raise IOError("Error while processing request:\n%s"%(self.url+debug_data))
 	
 	def getkey(self,keychar):
 		out=self.jsres
